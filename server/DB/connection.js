@@ -8,5 +8,4 @@ const pool = new pg.Pool({
     host: process.env.host,
     database: process.env.database,
 });
-
 export { pool };

@@ -5,7 +5,7 @@ import cors from 'cors';
 import session from 'express-session';
 import { pool } from './DB/connection.js';
 import express from 'express';
-
+import passport from './middleware/passport.js';
 const app = express();
 
 app.use(cors({ origin: process.env.ORIGIN, credentials: true })); //cors setup
@@ -13,13 +13,22 @@ const pgStore = new connectPgSimple(session);
 
 app.use(
     session({
-        store: new pgStore({ pool }),
+        store: new pgStore({ pool, createTableIfMissing: true }),
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        cookie: { maxAge: 24 * 60 * 60 * 1000 },
+        cookie: {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        },
     })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
