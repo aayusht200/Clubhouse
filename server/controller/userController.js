@@ -28,6 +28,25 @@ const signup = async (req, res) => {
     }
 };
 
+const joinClubhouse = async (req, res) => {
+    const { code } = req.body;
+    try {
+        if (code === process.env.CLUBHOUSE_CODE) {
+            const result = await pool.query(queries.setMember, [req.user.id]);
 
+            if (result.rowCount === 0) {
+                return res.status(404).json({
+                    message: 'User not found',
+                });
+            }
+            return res.status(200).send({ message: `${req.user.id} is now a member` });
+        }
+        return res.status(401).send({ message: `Incorrect code` });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || 'Internal Server Error',
+        });
+    }
+};
 
-export { signup };
+export { signup, joinClubhouse };

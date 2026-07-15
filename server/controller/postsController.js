@@ -2,13 +2,12 @@ import { pool } from '../DB/connection.js';
 import { queries as postQueries } from '../quries/postQueries.js';
 const getAllPosts = async (req, res) => {
     try {
-        if (!req.isAuthenticated()) {
-            const posts = await pool.query(postQueries.getAllPosts);
-            return res.status(200).send(posts.rows);
-        } else {
+        if (req.user?.is_member || req.user?.is_admin) {
             const posts = await pool.query(postQueries.getAllPostsWithAuthor);
             return res.status(200).send(posts.rows);
         }
+        const posts = await pool.query(postQueries.getAllPosts);
+        return res.status(200).send(posts.rows);
     } catch (error) {
         return res.status(500).json({
             message: error.message || 'Internal Server Error',
@@ -18,13 +17,12 @@ const getAllPosts = async (req, res) => {
 const getPostsById = async (req, res) => {
     const { id } = req.params;
     try {
-        if (!req.isAuthenticated()) {
-            const posts = await pool.query(postQueries.getPostById, [id]);
-            return res.status(200).send(posts.rows);
-        } else {
+        if (req.user?.is_member || req.user?.is_admin) {
             const posts = await pool.query(postQueries.getPostByIdWithAuthor, [id]);
             return res.status(200).send(posts.rows);
         }
+        const posts = await pool.query(postQueries.getPostById, [id]);
+        return res.status(200).send(posts.rows);
     } catch (error) {
         return res.status(500).json({
             message: error.message || 'Internal Server Error',

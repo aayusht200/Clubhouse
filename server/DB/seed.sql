@@ -35,7 +35,3 @@ VALUES
 
 -- Select all rows from 'posts'
 SELECT * FROM posts;
-
--- Insert data into 'posts'
-INSERT INTO posts (column1, column2)
-VALUES (value1, value2);
