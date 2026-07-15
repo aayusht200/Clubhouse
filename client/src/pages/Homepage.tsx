@@ -7,12 +7,11 @@ function Homepage() {
     const { posts } = useContext(PostContext);
     const { logout, isLoggedIn } = useContext(UserContext);
     const navigator = useNavigate();
-    console.log(document.cookie);
     return (
         <div className="flex flex-col gap-10 ">
-            <header className="border bg-amber-200 flex items-center p-4">
+            <header className="shadow bg-amber-200 flex items-center p-4">
                 <div className="left-header">
-                    <h1 className="font-bold text-lg md:text-xl lg:text-2xl">Clubhouse</h1>
+                    <h1 className="font-bold text-lg md:text-xl lg:text-2xl ">Clubhouse</h1>
                 </div>
 
                 <div className="right-header ml-auto">

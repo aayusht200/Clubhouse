@@ -30,7 +30,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
                     throw error;
                 });
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }
