@@ -35,6 +35,7 @@ interface UserContextProps {
     login: (data: LoginData) => Promise<void>;
     logout: () => Promise<void>;
     signup: (data: SignupData) => Promise<void>;
+    isLoggedIn: boolean;
 }
 
 export const UserContext = createContext<UserContextProps>({
@@ -42,6 +43,7 @@ export const UserContext = createContext<UserContextProps>({
     login: async () => {},
     logout: async () => {},
     signup: async () => {},
+    isLoggedIn: false,
 });
 
 export default UserContext;

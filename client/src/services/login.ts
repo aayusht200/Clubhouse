@@ -1,8 +1,8 @@
-import { api } from "./api"
+import { api } from './api';
+import type { LoginData } from '../context/UserContext';
+const userLogin = async ({ email, password }: LoginData) => {
+    const isLoggedIn = api.post('/users/login', { email: email, password: password });
+    return isLoggedIn;
+};
 
-const userLogin = async (email, password) => {
-
-}
-
-
-export default userLogin
+export default userLogin;

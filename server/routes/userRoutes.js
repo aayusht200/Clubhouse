@@ -15,7 +15,6 @@ router.post('/login', (req, res, next) => {
 
         req.login(user, (err) => {
             if (err) return next(err);
-            console.log(req.user);
             return res.status(200).json({
                 message: 'Logged in',
                 user: req.user,
@@ -39,7 +38,11 @@ router.post('/logout', (req, res, next) => {
         });
     });
 });
-
+router.get('/me', requireAuth, (req, res) => {
+    return res.status(200).json({
+        user: req.user,
+    });
+});
 router.post('/signup', signup);
 
 router.post('/join-club', requireAuth, joinClubhouse);
