@@ -5,8 +5,6 @@ interface PostCardProps {
 }
 
 function PostCard({ post }: PostCardProps) {
-    console.log(post);
-
     return (
         <div className="post-card border bg-amber-300 p-2 rounded-lg shadow">
             <header className="post-title border-b text-lg md:text-xl lg:text-2xl font-bold">{post.title}</header>

@@ -28,8 +28,9 @@ passport.use(
                         message: 'Invalid credentials',
                     });
                 }
+                const { password: _, ...safeUser } = user;
 
-                return done(null, user);
+                return done(null, safeUser);
             } catch (error) {
                 return done(error);
             }

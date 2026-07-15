@@ -1,4 +1,4 @@
-import getAllPosts from '../helperFunctions/getAllPosts';
+import getAllPosts from '../services/getAllPosts';
 import React, { useEffect, useState } from 'react';
 import { PostContext, type Post } from './postsContext';
 
