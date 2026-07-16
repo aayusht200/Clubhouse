@@ -1,8 +1,9 @@
 import UserContext, { InitialUser, type UserProps, type LoginData, type SignupData } from './UserContext.tsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import userLogin from '../services/login.ts';
 import userLogout from '../services/userLogout.ts';
 import getCurrentUser from '../services/getCurrentUser.ts';
+import { PostContext } from './PostsContext.tsx';
 export interface UserProviderProps {
     children: React.ReactNode;
 }
@@ -10,11 +11,13 @@ export interface UserProviderProps {
 const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<UserProps | null>(InitialUser);
     const [isLoggedIn, setLoggedIn] = useState(false);
+    const { refreshPosts } = useContext(PostContext);
     useEffect(() => {
         getCurrentUser()
             .then((user) => {
                 setUser(user);
                 setLoggedIn(true);
+                refreshPosts();
             })
             .catch(() => setUser(InitialUser));
     }, []);
@@ -24,6 +27,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
                 .then((data) => {
                     setUser(data.data.user);
                     setLoggedIn(true);
+                    refreshPosts();
                     return;
                 })
                 .catch((error) => {
@@ -41,6 +45,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
         await userLogout();
         setLoggedIn(false);
         setUser(InitialUser);
+        await refreshPosts();
         return;
     }
     return <UserContext.Provider value={{ user, login, logout, signup, isLoggedIn }}>{children}</UserContext.Provider>;

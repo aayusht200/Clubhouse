@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-
+import type { newPostProps } from './PostsProvider';
 export interface Post {
     id: string;
     title: string;
@@ -11,7 +11,8 @@ export interface Post {
 
 export interface PostContextProps {
     posts: Post[];
-    setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
+    refreshPosts: () => Promise<void>;
+    createPost: ({ title, text }: newPostProps) => Promise<void>;
 }
 
 export const initalPost: Post = {
@@ -23,4 +24,8 @@ export const initalPost: Post = {
     last_name: '',
 };
 
-export const PostContext = createContext<PostContextProps>({ posts: [], setPosts: () => {} });
+export const PostContext = createContext<PostContextProps>({
+    posts: [],
+    refreshPosts: async () => {},
+    createPost: async () => {},
+});

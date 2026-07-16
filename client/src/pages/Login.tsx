@@ -38,7 +38,7 @@ export default function Login() {
                         </label>
                         <input
                             type="text"
-                            className="bg-white rounded-2xl px-2 p-1 "
+                            className="bg-white rounded-2xl px-2 p-1 w-60 md:w-80 lg:w-100"
                             name="email"
                             id="email"
                             value={userData.email}

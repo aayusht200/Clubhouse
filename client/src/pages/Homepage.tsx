@@ -4,7 +4,7 @@ import PostCard from '../componenets/PostCard';
 import { useNavigate } from 'react-router';
 import UserContext from '../context/UserContext.tsx';
 function Homepage() {
-    const { posts } = useContext(PostContext);
+    const { posts, refreshPosts } = useContext(PostContext);
     const { logout, isLoggedIn } = useContext(UserContext);
     const navigator = useNavigate();
     return (
@@ -16,16 +16,27 @@ function Homepage() {
 
                 <div className="right-header ml-auto">
                     {isLoggedIn ? (
-                        <button
-                            type="button"
-                            className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
-                            onClick={async () => {
-                                await logout();
-                                navigator('/');
-                            }}
-                        >
-                            Logout
-                        </button>
+                        <div className="flex gap-3">
+                            <button
+                                type="button"
+                                className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
+                                onClick={async () => {
+                                    navigator('/create-post');
+                                }}
+                            >
+                                Create Post
+                            </button>
+                            <button
+                                type="button"
+                                className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
+                                onClick={async () => {
+                                    await logout();
+                                    await refreshPosts();
+                                }}
+                            >
+                                Logout
+                            </button>
+                        </div>
                     ) : (
                         <button
                             type="button"

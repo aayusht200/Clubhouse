@@ -6,10 +6,10 @@ import PostProvider from './context/PostsProvider.tsx';
 import UserProvider from './context/UserProvider.tsx';
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <UserProvider>
-            <PostProvider>
+        <PostProvider>
+            <UserProvider>
                 <App />
-            </PostProvider>
-        </UserProvider>
+            </UserProvider>
+        </PostProvider>
     </StrictMode>
 );
