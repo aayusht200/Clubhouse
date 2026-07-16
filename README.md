@@ -12,6 +12,10 @@ The project is organized as a monorepo with a React + TypeScript frontend and an
 
 **Project Status:** Finished portfolio project. Core authentication, membership, post visibility, post creation, and screenshot documentation are complete.
 
+## Live Demo
+
+**Live Application:** https://clubhouse-blush.vercel.app/
+
 ## Screenshots
 
 | Homepage | Login |
