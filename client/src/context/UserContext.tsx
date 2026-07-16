@@ -30,13 +30,17 @@ export interface SignupData {
     password: string;
 }
 
-
 interface UserContextProps {
     user: UserProps | null;
     login: (data: LoginData) => Promise<void>;
     logout: () => Promise<void>;
     signup: (data: SignupData) => Promise<void>;
+    verifyCode: (data: CodeProps) => {};
     isLoggedIn: boolean;
+}
+
+export interface CodeProps {
+    code: string;
 }
 
 export const UserContext = createContext<UserContextProps>({
@@ -44,6 +48,7 @@ export const UserContext = createContext<UserContextProps>({
     login: async () => {},
     logout: async () => {},
     signup: async () => {},
+    verifyCode: async () => {},
     isLoggedIn: false,
 });
 

@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router';
 import UserContext from '../context/UserContext.tsx';
 function Homepage() {
     const { posts, refreshPosts } = useContext(PostContext);
-    const { logout, isLoggedIn } = useContext(UserContext);
+    const { logout, isLoggedIn, user } = useContext(UserContext);
     const navigator = useNavigate();
+    const buttonStyle = 'border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer';
     return (
         <div className="flex flex-col gap-10 ">
             <header className="shadow bg-amber-200 flex items-center p-4">
@@ -17,18 +18,19 @@ function Homepage() {
                 <div className="right-header ml-auto">
                     {isLoggedIn ? (
                         <div className="flex gap-3">
-                            <button
-                                type="button"
-                                className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
-                                onClick={async () => {
-                                    navigator('/create-post');
-                                }}
-                            >
+                            {!user?.is_member && (
+                                <button type="button" className={buttonStyle} onClick={() => navigator('/secretpage')}>
+                                    Join Clubhouse
+                                </button>
+                            )}
+
+                            <button type="button" className={buttonStyle} onClick={() => navigator('/create-post')}>
                                 Create Post
                             </button>
+
                             <button
                                 type="button"
-                                className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
+                                className={buttonStyle}
                                 onClick={async () => {
                                     await logout();
                                     await refreshPosts();
@@ -38,11 +40,7 @@ function Homepage() {
                             </button>
                         </div>
                     ) : (
-                        <button
-                            type="button"
-                            className="border rounded-2xl px-3 text-lg md:text-xl lg:text-2xl hover:bg-amber-500 cursor-pointer"
-                            onClick={() => navigator('/login')}
-                        >
+                        <button type="button" className={buttonStyle} onClick={() => navigator('/login')}>
                             Login
                         </button>
                     )}

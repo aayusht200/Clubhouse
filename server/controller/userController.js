@@ -39,9 +39,9 @@ const joinClubhouse = async (req, res) => {
                     message: 'User not found',
                 });
             }
-            return res.status(200).send({ message: `${req.user.id} is now a member` });
+            return res.status(200).send({ message: true });
         }
-        return res.status(401).send({ message: `Incorrect code` });
+        return res.status(203).send({ message: false });
     } catch (error) {
         return res.status(500).json({
             message: error.message || 'Internal Server Error',

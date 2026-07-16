@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import Signup from './pages/Signup';
 import Error from './pages/Error';
 import CreatePost from './pages/CreatePost';
+import SecretPage from './pages/SecretPage';
 function App() {
     return (
         <div className="bg-amber-400  h-dvh min-h-max">
@@ -13,6 +14,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/create-post" element={<CreatePost />} />
+                    <Route path="/secretpage" element={<SecretPage />} />
                     <Route path="*" element={<Error />} />
                 </Routes>
             </BrowserRouter>

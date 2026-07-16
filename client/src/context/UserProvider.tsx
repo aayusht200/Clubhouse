@@ -1,10 +1,17 @@
-import UserContext, { InitialUser, type UserProps, type LoginData, type SignupData } from './UserContext.tsx';
+import UserContext, {
+    InitialUser,
+    type UserProps,
+    type LoginData,
+    type SignupData,
+    type CodeProps,
+} from './UserContext.tsx';
 import { useState, useEffect, useContext } from 'react';
 import userLogin from '../services/login.ts';
 import userLogout from '../services/userLogout.ts';
 import getCurrentUser from '../services/getCurrentUser.ts';
 import { PostContext } from './PostsContext.tsx';
 import signupUser from '../services/signupUser.ts';
+import joinClub from '../services/joinclub.ts';
 export interface UserProviderProps {
     children: React.ReactNode;
 }
@@ -47,6 +54,12 @@ const UserProvider = ({ children }: UserProviderProps) => {
                 throw error;
             });
     }
+    async function verifyCode(code: CodeProps) {
+        const validCode = await joinClub(code.code);
+        if (validCode) await refreshPosts();
+        return validCode;
+    }
+
     async function logout() {
         await userLogout();
         setLoggedIn(false);
@@ -54,7 +67,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
         await refreshPosts();
         return;
     }
-    return <UserContext.Provider value={{ user, login, logout, signup, isLoggedIn }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ user, login, logout, signup, isLoggedIn, verifyCode }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 export default UserProvider;
