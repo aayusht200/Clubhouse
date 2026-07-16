@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 import type { newPostProps } from './PostsProvider';
 export interface Post {
     id: string;

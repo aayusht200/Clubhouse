@@ -2,21 +2,29 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { PostContext } from '../context/PostsContext';
 import { useContext } from 'react';
+import { useForm, type SubmitHandler, type SubmitErrorHandler } from 'react-hook-form';
+import type { newPostProps } from '../context/PostsProvider';
+
 const CreatePost = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<boolean>(false);
-    const [post, setPost] = useState({ title: '', text: '' });
     const { createPost } = useContext(PostContext);
-    async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-        e.preventDefault();
-        await createPost(post)
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<newPostProps>();
+    const onSubmit: SubmitHandler<newPostProps> = (data) => {
+        createPost(data)
             .then(() => {
                 navigate('/');
             })
             .catch(() => {
                 setError(true);
             });
-    }
+    };
+    const onError: SubmitErrorHandler<newPostProps> = () => setError(false);
     return (
         <div className="min-h-screen flex flex-col">
             <header className="shadow bg-amber-200 flex items-center p-4">
@@ -30,40 +38,44 @@ const CreatePost = () => {
                 </div>
             </header>
             <div className="content  px-5 p-4 grid items-center justify-center flex-1">
-                <form onSubmit={handleSubmit} className="form text-sm md:text-lg lg:text-2xl ">
+                <form onSubmit={handleSubmit(onSubmit, onError)} className="form text-sm md:text-lg lg:text-2xl ">
                     <fieldset className="grid">
-                        <label htmlFor="email" className="font-bold">
+                        <label htmlFor="title" className="font-bold">
                             Title:
                         </label>
                         <input
-                            type="text"
                             className="bg-white rounded-2xl px-2 p-1 w-60 md:w-80 lg:w-120"
-                            name="email"
-                            id="email"
-                            value={post.title}
-                            onChange={(e) => {
-                                setPost((prev) => ({ ...prev, title: e.target.value }));
-                            }}
+                            id="title"
+                            {...register('title', {
+                                required: 'Title is required.',
+                                maxLength: {
+                                    value: 400,
+                                    message: 'Title too long',
+                                },
+                            })}
                         />
+                        {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                         <label htmlFor="text" className="font-bold">
                             Message:
                         </label>
                         <textarea
-                            name="text"
                             id="text"
                             className="bg-white rounded-2xl px-2 p-1 w-60 md:w-80 lg:w-150 line-clamp-7 min-h-60"
-                            value={post.text}
-                            onChange={(e) => {
-                                setPost((prev) => ({ ...prev, text: e.target.value }));
-                            }}
+                            {...register('text', {
+                                required: 'Message is required.',
+                            })}
                         ></textarea>
+                        {errors.text && <span className="text-red-600">{errors.text.message}</span>}
                         {error && <span>Unable to send Message please try again</span>}
                     </fieldset>
                     <div className="action flex justify-evenly p-5">
                         <button
                             type="reset"
                             className="border rounded-2xl px-3 font-bold hover:bg-amber-500 cursor-pointer"
-                            onClick={() => setPost({ title: '', text: '' })}
+                            onClick={() => {
+                                reset();
+                                setError(false);
+                            }}
                         >
                             Clear
                         </button>

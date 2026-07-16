@@ -4,6 +4,7 @@ import userLogin from '../services/login.ts';
 import userLogout from '../services/userLogout.ts';
 import getCurrentUser from '../services/getCurrentUser.ts';
 import { PostContext } from './PostsContext.tsx';
+import signupUser from '../services/signupUser.ts';
 export interface UserProviderProps {
     children: React.ReactNode;
 }
@@ -38,8 +39,13 @@ const UserProvider = ({ children }: UserProviderProps) => {
         }
     }
     async function signup({ email, password, first_name, last_name }: SignupData) {
-        console.log(email, password, first_name, last_name);
-        return;
+        await signupUser({ email: email, password: password, first_name: first_name, last_name: last_name })
+            .then(() => {
+                return;
+            })
+            .catch((error) => {
+                throw error;
+            });
     }
     async function logout() {
         await userLogout();

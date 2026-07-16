@@ -30,6 +30,7 @@ export interface SignupData {
     password: string;
 }
 
+
 interface UserContextProps {
     user: UserProps | null;
     login: (data: LoginData) => Promise<void>;

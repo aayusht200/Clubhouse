@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UserContext from '../context/UserContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router';
+import { useForm, type SubmitHandler, type SubmitErrorHandler } from 'react-hook-form';
+
+import type { LoginData } from '../context/UserContext';
+
 export default function Login() {
     const { login } = useContext(UserContext);
-    const [userData, setUserData] = useState({ email: '', password: '' });
     const [error, setError] = useState<boolean>(false);
     const navigate = useNavigate();
-    async function handleLogin(e: React.SubmitEvent<HTMLFormElement>) {
-        e.preventDefault();
-        try {
-            await login({ email: userData.email, password: userData.password });
-            navigate('/', { replace: true });
-        } catch (err) {
-            console.log(err);
-            setError(true);
-        }
-    }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginData>({ shouldUseNativeValidation: false, progressive: false });
 
+    const onSubmit: SubmitHandler<LoginData> = (data) => {
+        login(data)
+            .then(() => {
+                navigate('/', { replace: true });
+            })
+            .catch(() => {
+                setError(true);
+            });
+    };
+    const onError: SubmitErrorHandler<LoginData> = () => {
+        setError(true);
+    };
     return (
         <div className="min-h-screen flex flex-col">
             <header className="shadow bg-amber-200 flex items-center p-4">
@@ -31,42 +41,46 @@ export default function Login() {
                 </div>
             </header>
             <div className="content  pl-5 pr-5 grid items-center justify-center flex-1">
-                <form onSubmit={handleLogin} className="form text-sm md:text-lg lg:text-2xl ">
+                <form
+                    onSubmit={handleSubmit(onSubmit, onError)}
+                    className="form text-sm md:text-lg lg:text-2xl "
+                    noValidate
+                >
                     <fieldset className="grid">
                         <label htmlFor="email" className="font-bold">
                             Email:
                         </label>
                         <input
-                            type="text"
+                            type="email"
                             className="bg-white rounded-2xl px-2 p-1 w-60 md:w-80 lg:w-100"
-                            name="email"
                             id="email"
-                            value={userData.email}
-                            onChange={(e) => {
-                                setError(false);
-                                setUserData((prev) => ({
-                                    ...prev,
-                                    email: e.target.value,
-                                }));
-                            }}
+                            {...register('email', {
+                                required: 'Required field.',
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: 'Email should match the pattern : example@email.com',
+                                },
+                            })}
                         />
+                        {errors.email && <span className="text-red-600">{errors.email.message}</span>}
                         <label htmlFor="password" className="font-bold">
                             Password:
                         </label>
                         <input
                             type="password"
                             className="bg-white rounded-2xl px-2 p-1 "
-                            name="password"
                             id="password"
-                            value={userData.password}
-                            onChange={(e) => {
-                                setError(false);
-                                setUserData((prev) => ({
-                                    ...prev,
-                                    password: e.target.value,
-                                }));
-                            }}
+                            {...register('password', {
+                                required: 'Required field.',
+                                minLength: { value: 8, message: 'Minimum length is 8' },
+                                maxLength: { value: 64, message: 'Maximum length is 64' },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/,
+                                    message: 'Must contain uppercase, lowercase, number and special character',
+                                },
+                            })}
                         />
+                        {errors.password && <span className="text-red-600">{errors.password.message}</span>}
                         {error && <span>Invalid Username/Password</span>}
                     </fieldset>
                     <div className="action flex justify-evenly p-5">
