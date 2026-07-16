@@ -1,5 +1,5 @@
 import { pool } from '../DB/connection.js';
-import { queries } from '../quries/userQueries.js';
+import { queries } from '../queries/userQueries.js';
 import bcrypt from 'bcrypt';
 
 const signup = async (req, res) => {

@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import { pool } from '../DB/connection.js';
-import { queries } from '../quries/userQueries.js';
+import { queries } from '../queries/userQueries.js';
 
 passport.use(
     new LocalStrategy(

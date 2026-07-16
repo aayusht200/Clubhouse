@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { PostContext } from '../context/PostsContext.tsx';
-import PostCard from '../componenets/PostCard';
+import PostCard from '../components/PostCard';
 import { useNavigate } from 'react-router';
 import UserContext from '../context/UserContext.tsx';
 function Homepage() {

@@ -1,5 +1,5 @@
 import { pool } from '../DB/connection.js';
-import { queries as postQueries } from '../quries/postQueries.js';
+import { queries as postQueries } from '../queries/postQueries.js';
 const getAllPosts = async (req, res) => {
     try {
         if (req.user?.is_member || req.user?.is_admin) {

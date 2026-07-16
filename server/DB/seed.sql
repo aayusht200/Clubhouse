@@ -33,5 +33,4 @@ VALUES
 
 
 
--- Select all rows from 'posts'
-SELECT * FROM posts;
+
