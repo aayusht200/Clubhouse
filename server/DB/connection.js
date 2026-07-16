@@ -1,20 +1,14 @@
 import pg from 'pg';
 
-pg.types.setTypeParser(1082, (val) => val); //disables autoconversion of certain
 if (process.env.NODE_ENV !== 'production') {
     await import('dotenv/config');
 }
 
+pg.types.setTypeParser(1082, (val) => val);
+
 const pool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
-// const pool = new pg.Pool({
-//     user: process.env.user,
-//     password: process.env.password,
-//     host: process.env.host,
-//     database: process.env.database,
-// });
+
 export { pool };

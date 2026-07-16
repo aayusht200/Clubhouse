@@ -7,6 +7,7 @@ import { pool } from './DB/connection.js';
 import express from 'express';
 import passport from './middleware/passport.js';
 const app = express();
+app.set('trust proxy', 1);
 
 app.use(cors({ origin: process.env.ORIGIN, credentials: true })); //cors setup
 const pgStore = new connectPgSimple(session);
@@ -21,7 +22,7 @@ app.use(
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         },
     })
 );
